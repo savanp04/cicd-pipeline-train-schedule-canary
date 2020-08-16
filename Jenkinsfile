@@ -42,10 +42,10 @@ pipeline {
             when {
                 branch 'master'
             }
-            enviornment {
-               CANARY_REPLICAS = 1 
+            environment { 
+                CANARY_REPLICAS = 1
             }
-            steps{
+            steps {
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'train-schedule-kube-canary.yml',
@@ -53,16 +53,16 @@ pipeline {
                 )
             }
         }
-        stage('DeployToProduction') {
+stage('DeployToProduction') {
             when {
                 branch 'master'
+            }
+            environment { 
+                CANARY_REPLICAS = 0
             }
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                enviornment {
-                   CANARY_REPLICAS = 0 
-                } 
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'train-schedule-kube-canary.yml',
